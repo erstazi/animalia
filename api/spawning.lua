@@ -210,12 +210,13 @@ creatura.register_abm_spawn("animalia:bat", {
 	chance = ambient_spawn_chance,
 	interval = 30,
 	min_light = 0,
+	max_light = 5,
 	min_height = -31000,
-	max_height = 1,
+	max_height = -30,
 	min_group = 3,
 	max_group = 5,
 	spawn_cap = 6,
-	nodes = {"group:stone"}
+	nodes = {"default:stone"}
 })
 
 creatura.register_abm_spawn("animalia:song_bird", {
