@@ -1038,6 +1038,43 @@ creatura.register_utility("animalia:swim_wander", function(self)
 	self:set_utility(func)
 end)
 
+creatura.register_utility("animalia:tropical_fish_seek_water", function(self, target_pos)
+	local function func(mob)
+		local pos = mob.object:get_pos()
+
+		if not pos or not target_pos then
+			return true
+		end
+
+		if mob.in_liquid then
+			return true
+		end
+
+		if not mob:get_action() then
+			local yaw = mob.object:get_yaw()
+
+			if yaw then
+				local target_yaw = dir2yaw(
+					vector.direction(pos, target_pos)
+				)
+
+				if abs(diff(yaw, target_yaw)) > 0.1 then
+					mob:turn_to(target_yaw, 12)
+				end
+			end
+
+			mob:set_forward_velocity(mob.speed * 0.5)
+			mob:animate("flop")
+		end
+
+		if vec_dist(pos, target_pos) < 1 then
+			return true
+		end
+	end
+
+	self:set_utility(func)
+end)
+
 creatura.register_utility("animalia:swim_seek_land", function(self)
 	local land_pos
 
@@ -1802,6 +1839,54 @@ animalia.mob_ai.swim_seek_land = {
 			return 0.3, {self}
 		end
 		return 0
+	end
+}
+
+animalia.mob_ai.tropical_fish_seek_water = {
+	utility = "animalia:tropical_fish_seek_water",
+	step_delay = 0.25,
+
+	get_score = function(self)
+		if self.in_liquid then
+			return 0
+		end
+
+		local pos = self.object:get_pos()
+		if not pos then
+			return 0
+		end
+
+		local water = minetest.find_nodes_in_area(
+			vector.subtract(pos, 8),
+			vector.add(pos, 8),
+			{"group:water"}
+		)
+
+		if not water or not water[1] then
+			return 0
+		end
+
+		local closest
+		local closest_dist
+
+		for _, water_pos in ipairs(water) do
+			local water_node = minetest.get_node(water_pos)
+
+			if minetest.get_item_group(water_node.name, "water") > 0 then
+				local dist = vector.distance(pos, water_pos)
+
+				if not closest_dist or dist < closest_dist then
+					closest = water_pos
+					closest_dist = dist
+				end
+			end
+		end
+
+		if not closest then
+			return 0
+		end
+
+		return 0.8, {self, closest}
 	end
 }
 

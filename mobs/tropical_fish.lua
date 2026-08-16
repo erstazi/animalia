@@ -51,10 +51,13 @@ creatura.register_mob("animalia:tropical_fish", {
 	catch_with_lasso = false,
 
 	-- Functions
+	-- utility_stack = {
+		-- animalia.mob_ai.swim_wander
+	-- },
 	utility_stack = {
+		animalia.mob_ai.tropical_fish_seek_water,
 		animalia.mob_ai.swim_wander
 	},
-
 	activate_func = function(self)
 		animalia.initialize_api(self)
 		animalia.initialize_lasso(self)
