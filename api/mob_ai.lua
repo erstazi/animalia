@@ -1039,6 +1039,8 @@ creatura.register_utility("animalia:swim_wander", function(self)
 end)
 
 creatura.register_utility("animalia:tropical_fish_seek_water", function(self, target_pos)
+	local timer = 15
+
 	local function func(mob)
 		local pos = mob.object:get_pos()
 
@@ -1046,8 +1048,14 @@ creatura.register_utility("animalia:tropical_fish_seek_water", function(self, ta
 			return true
 		end
 
-		-- Back in water: stop seeking.
+		-- Back in water.
 		if mob.in_liquid then
+			return true
+		end
+
+		-- Fish has been out of water too long.
+		timer = timer - mob.dtime
+		if timer <= 0 then
 			return true
 		end
 
@@ -1063,7 +1071,7 @@ creatura.register_utility("animalia:tropical_fish_seek_water", function(self, ta
 			end
 		end
 
-		-- Fish are air-phobic: keep moving toward water.
+		-- Keep flopping directly toward the original water target.
 		mob:set_forward_velocity(mob.speed * 0.5)
 		mob:animate("flop")
 
@@ -1867,35 +1875,17 @@ animalia.mob_ai.tropical_fish_seek_water = {
 		end
 
 		local closest
-		local closest_score
+		local closest_dist
 
 		for _, water_pos in ipairs(water) do
 			local water_node = minetest.get_node(water_pos)
 
 			if minetest.get_item_group(water_node.name, "water") > 0 then
-				local dx = water_pos.x - pos.x
-				local dy = water_pos.y - pos.y
-				local dz = water_pos.z - pos.z
+				local dist = vector.distance(pos, water_pos)
 
-				local horizontal_dist = math.sqrt(dx * dx + dz * dz)
-				local vertical_dist = abs(dy)
-
-				-- Ignore water that is too far above or below us.
-				if vertical_dist <= 2 then
-					local dir = vector.direction(pos, water_pos)
-					local check_pos = vector.add(pos, vector.multiply(dir, 1.5))
-					local check_node = minetest.get_node(vector.round(check_pos))
-					local check_def = minetest.registered_nodes[check_node.name]
-
-					-- Prefer water with an open approach.
-					if check_def and not check_def.walkable then
-						local score = horizontal_dist + vertical_dist * 3
-
-						if not closest_score or score < closest_score then
-							closest = water_pos
-							closest_score = score
-						end
-					end
+				if not closest_dist or dist < closest_dist then
+					closest = water_pos
+					closest_dist = dist
 				end
 			end
 		end
