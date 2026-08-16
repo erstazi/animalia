@@ -1847,7 +1847,6 @@ animalia.mob_ai.tropical_fish_seek_water = {
 	step_delay = 0.25,
 
 	get_score = function(self)
-		-- Never seek water when already swimming.
 		if self.in_liquid then
 			return 0
 		end
@@ -1878,15 +1877,25 @@ animalia.mob_ai.tropical_fish_seek_water = {
 				local dy = water_pos.y - pos.y
 				local dz = water_pos.z - pos.z
 
-				-- Prefer nearby water on roughly the same vertical level.
 				local horizontal_dist = math.sqrt(dx * dx + dz * dz)
 				local vertical_dist = abs(dy)
 
-				local score = horizontal_dist + vertical_dist * 3
+				-- Ignore water that is too far above or below us.
+				if vertical_dist <= 2 then
+					local dir = vector.direction(pos, water_pos)
+					local check_pos = vector.add(pos, vector.multiply(dir, 1.5))
+					local check_node = minetest.get_node(vector.round(check_pos))
+					local check_def = minetest.registered_nodes[check_node.name]
 
-				if not closest_score or score < closest_score then
-					closest = water_pos
-					closest_score = score
+					-- Prefer water with an open approach.
+					if check_def and not check_def.walkable then
+						local score = horizontal_dist + vertical_dist * 3
+
+						if not closest_score or score < closest_score then
+							closest = water_pos
+							closest_score = score
+						end
+					end
 				end
 			end
 		end
@@ -1895,7 +1904,6 @@ animalia.mob_ai.tropical_fish_seek_water = {
 			return 0
 		end
 
-		-- High priority while stranded in air/on land.
 		return 1.0, {self, closest}
 	end
 }
