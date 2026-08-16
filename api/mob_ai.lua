@@ -1046,26 +1046,26 @@ creatura.register_utility("animalia:tropical_fish_seek_water", function(self, ta
 			return true
 		end
 
+		-- Back in water: stop seeking.
 		if mob.in_liquid then
 			return true
 		end
 
-		if not mob:get_action() then
-			local yaw = mob.object:get_yaw()
+		local yaw = mob.object:get_yaw()
 
-			if yaw then
-				local target_yaw = dir2yaw(
-					vector.direction(pos, target_pos)
-				)
+		if yaw then
+			local target_yaw = dir2yaw(
+				vector.direction(pos, target_pos)
+			)
 
-				if abs(diff(yaw, target_yaw)) > 0.1 then
-					mob:turn_to(target_yaw, 12)
-				end
+			if abs(diff(yaw, target_yaw)) > 0.1 then
+				mob:turn_to(target_yaw, 12)
 			end
-
-			mob:set_forward_velocity(mob.speed * 0.5)
-			mob:animate("flop")
 		end
+
+		-- Fish are air-phobic: keep moving toward water.
+		mob:set_forward_velocity(mob.speed * 0.5)
+		mob:animate("flop")
 
 		if vec_dist(pos, target_pos) < 1 then
 			return true
@@ -1847,6 +1847,7 @@ animalia.mob_ai.tropical_fish_seek_water = {
 	step_delay = 0.25,
 
 	get_score = function(self)
+		-- Never seek water when already swimming.
 		if self.in_liquid then
 			return 0
 		end
@@ -1867,17 +1868,25 @@ animalia.mob_ai.tropical_fish_seek_water = {
 		end
 
 		local closest
-		local closest_dist
+		local closest_score
 
 		for _, water_pos in ipairs(water) do
 			local water_node = minetest.get_node(water_pos)
 
 			if minetest.get_item_group(water_node.name, "water") > 0 then
-				local dist = vector.distance(pos, water_pos)
+				local dx = water_pos.x - pos.x
+				local dy = water_pos.y - pos.y
+				local dz = water_pos.z - pos.z
 
-				if not closest_dist or dist < closest_dist then
+				-- Prefer nearby water on roughly the same vertical level.
+				local horizontal_dist = math.sqrt(dx * dx + dz * dz)
+				local vertical_dist = abs(dy)
+
+				local score = horizontal_dist + vertical_dist * 3
+
+				if not closest_score or score < closest_score then
 					closest = water_pos
-					closest_dist = dist
+					closest_score = score
 				end
 			end
 		end
@@ -1886,7 +1895,8 @@ animalia.mob_ai.tropical_fish_seek_water = {
 			return 0
 		end
 
-		return 0.8, {self, closest}
+		-- High priority while stranded in air/on land.
+		return 1.0, {self, closest}
 	end
 }
 
