@@ -1039,7 +1039,7 @@ creatura.register_utility("animalia:swim_wander", function(self)
 end)
 
 creatura.register_utility("animalia:tropical_fish_seek_water", function(self, target_pos)
-	local timer = 15
+	self.tropical_fish_water_timer = self.tropical_fish_water_timer or 5
 
 	local function func(mob)
 		local pos = mob.object:get_pos()
@@ -1050,13 +1050,21 @@ creatura.register_utility("animalia:tropical_fish_seek_water", function(self, ta
 
 		-- Back in water.
 		if mob.in_liquid then
+			mob.tropical_fish_water_timer = nil
 			return true
 		end
 
 		-- Fish has been out of water too long.
-		timer = timer - mob.dtime
-		if timer <= 0 then
+		mob.tropical_fish_water_timer =
+			mob.tropical_fish_water_timer - mob.dtime
+
+		if mob.tropical_fish_water_timer <= 0 then
+			mob:initiate_utility("animalia:die", mob)
+			core.log("warning", "[animalia] FISH TIMER RAN: " .. mob.tropical_fish_water_timer )
+			mob.tropical_fish_water_timer = nil
 			return true
+		else
+			core.log("warning", "[animalia] FISH TIMER RUNNING: " .. mob.tropical_fish_water_timer )
 		end
 
 		local yaw = mob.object:get_yaw()
@@ -1071,13 +1079,24 @@ creatura.register_utility("animalia:tropical_fish_seek_water", function(self, ta
 			end
 		end
 
-		-- Keep flopping directly toward the original water target.
+		mob:set_gravity(-9.8)
+		mob:set_vertical_velocity(0)
+
+		local vel = mob.object:get_velocity()
+
+		core.log("warning",
+			"[animalia] FISH SEEK pos=" ..
+			minetest.pos_to_string(pos) ..
+			" target=" ..
+			minetest.pos_to_string(target_pos) ..
+			" vel=" ..
+			minetest.pos_to_string(vel) ..
+			" gravity=" ..
+			tostring(mob.gravity)
+		)
+
 		mob:set_forward_velocity(mob.speed * 0.5)
 		mob:animate("flop")
-
-		if vec_dist(pos, target_pos) < 1 then
-			return true
-		end
 	end
 
 	self:set_utility(func)
