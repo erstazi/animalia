@@ -1060,11 +1060,11 @@ creatura.register_utility("animalia:tropical_fish_seek_water", function(self, ta
 
 		if mob.tropical_fish_water_timer <= 0 then
 			mob:initiate_utility("animalia:die", mob)
-			core.log("warning", "[animalia] FISH TIMER RAN: " .. mob.tropical_fish_water_timer )
+			-- core.log("warning", "[animalia] FISH TIMER RAN: " .. mob.tropical_fish_water_timer )
 			mob.tropical_fish_water_timer = nil
 			return true
 		else
-			core.log("warning", "[animalia] FISH TIMER RUNNING: " .. mob.tropical_fish_water_timer )
+			-- core.log("warning", "[animalia] FISH TIMER RUNNING: " .. mob.tropical_fish_water_timer )
 		end
 
 		local yaw = mob.object:get_yaw()
@@ -1084,16 +1084,16 @@ creatura.register_utility("animalia:tropical_fish_seek_water", function(self, ta
 
 		local vel = mob.object:get_velocity()
 
-		core.log("warning",
-			"[animalia] FISH SEEK pos=" ..
-			minetest.pos_to_string(pos) ..
-			" target=" ..
-			minetest.pos_to_string(target_pos) ..
-			" vel=" ..
-			minetest.pos_to_string(vel) ..
-			" gravity=" ..
-			tostring(mob.gravity)
-		)
+		-- core.log("warning",
+			-- "[animalia] FISH SEEK pos=" ..
+			-- minetest.pos_to_string(pos) ..
+			-- " target=" ..
+			-- minetest.pos_to_string(target_pos) ..
+			-- " vel=" ..
+			-- minetest.pos_to_string(vel) ..
+			-- " gravity=" ..
+			-- tostring(mob.gravity)
+		-- )
 
 		mob:set_forward_velocity(mob.speed * 0.5)
 		mob:animate("flop")
