@@ -180,14 +180,14 @@ minetest.register_craftitem("animalia:beef_raw", {
 	description = "Raw Beef",
 	inventory_image = "animalia_beef_raw.png",
 	on_use = minetest.item_eat(1),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_raw = 1},
 })
 
 minetest.register_craftitem("animalia:beef_cooked", {
 	description = "Steak",
 	inventory_image = "animalia_beef_cooked.png",
 	on_use = minetest.item_eat(8),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_cooked = 1},
 })
 
 minetest.register_craft({
@@ -200,14 +200,14 @@ minetest.register_craftitem("animalia:mutton_raw", {
 	description = "Raw Mutton",
 	inventory_image = "animalia_mutton_raw.png",
 	on_use = minetest.item_eat(1),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_raw = 1},
 })
 
 minetest.register_craftitem("animalia:mutton_cooked", {
 	description = "Cooked Mutton",
 	inventory_image = "animalia_mutton_cooked.png",
 	on_use = minetest.item_eat(6),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_cooked = 1},
 })
 
 minetest.register_craft({
@@ -220,14 +220,14 @@ minetest.register_craftitem("animalia:rat_raw", {
 	description = "Raw Rat",
 	inventory_image = "animalia_rat_raw.png",
 	on_use = minetest.item_eat(1),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_raw = 1},
 })
 
 minetest.register_craftitem("animalia:rat_cooked", {
 	description = "Cooked Rat",
 	inventory_image = "animalia_rat_cooked.png",
 	on_use = minetest.item_eat(2),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_cooked = 1},
 })
 
 minetest.register_craft({
@@ -240,14 +240,14 @@ minetest.register_craftitem("animalia:porkchop_raw", {
 	description = "Raw Porkchop",
 	inventory_image = "animalia_porkchop_raw.png",
 	on_use = minetest.item_eat(1),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_raw = 1},
 })
 
 minetest.register_craftitem("animalia:porkchop_cooked", {
 	description = "Cooked Porkchop",
 	inventory_image = "animalia_porkchop_cooked.png",
 	on_use = minetest.item_eat(7),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_cooked = 1},
 })
 
 minetest.register_craft({
@@ -260,14 +260,14 @@ minetest.register_craftitem("animalia:poultry_raw", {
 	description = "Raw Poultry",
 	inventory_image = "animalia_poultry_raw.png",
 	on_use = minetest.item_eat(1),
-	groups = {flammable = 2, meat = 1, food_meat = 1, food_chicken_raw = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_raw = 1, food_chicken_raw = 1},
 })
 
 minetest.register_craftitem("animalia:poultry_cooked", {
 	description = "Cooked Poultry",
 	inventory_image = "animalia_poultry_cooked.png",
 	on_use = minetest.item_eat(6),
-	groups = {flammable = 2, meat = 1, food_meat = 1, food_chicken_cooked = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_cooked = 1, food_chicken_cooked = 1},
 })
 
 minetest.register_craft({
@@ -280,14 +280,14 @@ minetest.register_craftitem("animalia:venison_raw", {
 	description = "Raw Venison",
 	inventory_image = "animalia_venison_raw.png",
 	on_use = minetest.item_eat(1),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_raw = 1},
 })
 
 minetest.register_craftitem("animalia:venison_cooked", {
 	description = "Venison Steak",
 	inventory_image = "animalia_venison_cooked.png",
 	on_use = minetest.item_eat(10),
-	groups = {flammable = 2, meat = 1, food_meat = 1},
+	groups = {flammable = 2, meat = 1, food_meat = 1, food_meat_cooked = 1},
 })
 
 minetest.register_craft({
